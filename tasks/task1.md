@@ -46,6 +46,14 @@ Three `# TODO (Task 1)` markers in `_compute_metrics`:
 2. **Latency percentiles.** Log `request_latency_p50_seconds` and `request_latency_p95_seconds`. `np.percentile` returns a numpy scalar — wrap with `float(...)` before assigning.
 3. **Output-token aggregates.** Log `total_output_tokens` and `mean_output_tokens`, mirroring the input-token pattern above.
 
+## Grading (25 pts)
+
+| Subtask | Points |
+|---|---|
+| `judge_evaluations_total_<verdict>` — per-verdict absolute counts | 8 |
+| `request_latency_p50_seconds` + `request_latency_p95_seconds` | 9 |
+| `total_output_tokens` + `mean_output_tokens` | 8 |
+
 ## Why p50 and p95 (and not the mean alone)
 
 The mean is misleading when the distribution has a tail — a few very slow requests skew it upward. p50 (the median) and p95 (the slow tail) give a much clearer picture:

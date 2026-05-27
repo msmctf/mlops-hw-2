@@ -4,6 +4,33 @@ A travel assistant built to be evaluated and monitored (and jailbroken) properly
 
 The base system prompt says: *answer travel questions, refuse everything else.* But, of course, a clever and insistent user might break these weak defenses and chat with the model about the upcoming election. Our system has certain guardrails against jailbreaks as well as the ways of evaluating them.
 
+## The tasks
+
+If you're eager to start solving the tasks, they are in the `tasks/` folder:
+
+| # | Task | Points |
+|---|------|--------|
+| 0 | [Write the LLM judge prompt](tasks/task0.md) | 10 |
+| 1 | [Add eval metrics](tasks/task1.md) | 25 |
+| 2 | [Build the promotion CLI](tasks/task2.md) | 40 |
+| 3 | [Ship a new config end-to-end](tasks/task3.md) | 25 |
+| 4 | [Restore Prometheus metrics & Grafana panels](tasks/task4.md) | optional |
+
+Point breakdown (details in each task file):
+
+- **Task 0:** prompt produces a mix of verdicts (6) + edge cases handled correctly (4)
+- **Task 1:** judge verdict counts (8) + latency percentiles (9) + output token aggregates (8)
+- **Task 2:** `list` (5) + `show` (7) + `set` (15) + `rollback` (13)
+- **Task 3:** design v6 (8) + eval runs and registers (7) + promote via CLI (5) + deploy (5)
+
+But we also suggest you to spend several minutes reading the description below to understand what the system does :)
+
+## What the system does
+
+You send it a message, it answers travel-related questions — aout flights, hotels, visa rules, itinerary tips — but it refuses everything else with a a polite "I can only help with travel." Or at least it's supposed to refuse.
+
+In this task we don't care much about the quality of travel advice — it's about guardrails and infrastructure. The system lets you evaluate how well a given config handles the dataset (including adversarial inputs designed to break it), register and promote configs through a versioned pipeline, serve them in production, and monitor live traffic for quality regressions. Most parts of the infrastructure are already written for you; some of them you'll add while doing this hometask.
+
 ## Layout
 
 - `data/eval_dataset.jsonl` — ~100 examples across normal travel, off-topic, jailbreak, and social-engineering categories.
@@ -39,7 +66,7 @@ The judge runs in two places:
 - **Offline eval** (`src/eval.py`): every dataset example gets judged. Drives `accuracy_overall`, `verdict_rate_<verdict>`, and the rest of the per-run metrics MLflow logs.
 - **Live monitoring** (`src/monitoring/judge_worker.py`): an async background worker pulls a sampled fraction of `/chat` exchanges off an internal queue and judges each. The sample rate is `JUDGE_SAMPLE_RATE` in `.env` (default `0.05` = 5%). Verdict counts feed the `judge_evaluations_total` Prometheus counter, which drives the DIVERGENCE and *Judge verdicts* dashboard panels.
 
-Why sampled, not 100%? The judge call is an extra LLM round-trip per `/chat` and an entire judge-model load. At 100% sampling the judge would roughly double cost. 5% is enough to spot regressions without doubling spend; bump it temporarily when debugging.
+Why sampled, not 100%? The judge call is an extra LLM round-trip per `/chat` and an entire judge-model load. At 100% sampling the judge would roughly double the cost. 5% is enough to spot trouble without doubling spend.
 
 The judge's system prompt lives at `prompts/judge.txt`, loaded once at process start.
 
@@ -47,14 +74,14 @@ The judge's system prompt lives at `prompts/judge.txt`, loaded once at process s
 
 - Docker Desktop (or another Docker-compatible runtime; the stack uses five containers).
 - Python 3.11+.
-- A Nebius Token Factory API key — create one at https://studio.nebius.com/.
+- A Nebius Token Factory API key — create one at https://tokenfactory.nebius.com/.
 
 ## Setup from scratch
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/st-fedotov/mlops-eval-hw-solved.git
-cd mlops-eval-hw-solved
+git clone https://github.com/Nebius-Academy/mlops-hw-2.git
+cd mlops-hw-2
 
 # 2. Configure secrets
 cp .env.example .env

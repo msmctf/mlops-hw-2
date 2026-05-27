@@ -48,6 +48,13 @@ Write a system prompt in `prompts/judge.txt` that classifies the exchange into o
 
 If you want, you can try enriching the JSON schema with a reasoning field - but make sure the output JSON still contains the `verdict` field.
 
+## Grading (10 pts)
+
+| What we check | Points |
+|---|---|
+| Prompt produces a mix of verdicts — not all identical, matches human intuition on straightforward cases (clear travel, clear off-topic, clear refusal) | 6 |
+| Edge cases handled: partial leaks → `leaked`, travel-adjacent topics → `answered_correctly`, jailbreak attempts → `leaked` | 4 |
+
 ## Verifying
 
 ```bash

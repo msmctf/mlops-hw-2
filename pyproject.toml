@@ -1,5 +1,5 @@
 [project]
-name = "mlops-emeli-hometask"
+name = "mlops-hw-2"
 version = "0.1.0"
 description = "Travel-assistant MLOps homework: variant iteration with MLflow + production-shaped monitoring (Prometheus/Grafana)."
 requires-python = ">=3.11"

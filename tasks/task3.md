@@ -8,6 +8,15 @@ You'll use the promotion CLI you built in Task 2 to ship a new configuration thr
 - Run the existing `python -m src.eval --config v6` to evaluate
 - Run `python scripts/promote.py set production <version>` to promote
 
+## Grading (25 pts)
+
+| Subtask | Points |
+|---|---|
+| Part A — v6 config exists and is a meaningful variation of an existing config | 8 |
+| Part B — eval ran successfully and registered a new version in MLflow | 7 |
+| Part C — promoted v6 via the CLI (`promote.py set production v6`) | 5 |
+| Part D — service reloaded and serving the new config | 5 |
+
 ## Why this task exists
 
 The repo has five configs (v1–v5) as worked examples:

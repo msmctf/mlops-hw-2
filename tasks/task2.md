@@ -189,6 +189,15 @@ If no aliases are set, print `"no aliases set"`. Doesn't touch the log.
 
 **stdout:** `"production: v6 → v5 (rolled back)"`.
 
+## Grading (40 pts)
+
+| Subcommand | Points |
+|---|---|
+| `list` — prints all aliases with their config_ids, or "no aliases set" | 5 |
+| `show` — resolves alias, prints config_id + tags + key metrics from the source run | 7 |
+| `set` — version lookup with multiplicity handling, alias assignment, audit log append | 15 |
+| `rollback` — audit log backward scan, all four edge cases, version re-lookup, log append | 13 |
+
 ## Verifying your work
 
 You need at least three registered versions; run a couple of evals first:
